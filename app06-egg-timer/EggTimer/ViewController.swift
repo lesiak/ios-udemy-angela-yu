@@ -10,16 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var titleLabel: UILabel!
+    
     let eggTimes = ["Soft":  5, "Medium": 7, "Hard": 12]
     
     var secondsRemaining = 60
     
+    var timer = Timer()
+    
     @IBAction func hardnessSelected(_ sender: UIButton) {
+        timer.invalidate()
         let hardness = sender.currentTitle!
-        let cookingTimeInSeconds = eggTimes[hardness]! * 60
+        let cookingTimeInSeconds = eggTimes[hardness]! * 1
         secondsRemaining = cookingTimeInSeconds
         print("Clicked \(secondsRemaining)")
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in self.updateTimer() }
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in self.updateTimer() }
         
     }
     
@@ -27,6 +32,9 @@ class ViewController: UIViewController {
         if secondsRemaining > 0 {
             print("\(secondsRemaining) seconds.")
             secondsRemaining -= 1
+        } else {
+            timer.invalidate()
+            titleLabel.text = "Done"
         }
     }
 }
