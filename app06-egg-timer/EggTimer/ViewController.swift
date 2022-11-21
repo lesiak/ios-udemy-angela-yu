@@ -12,9 +12,12 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     
+    @IBOutlet weak var progressBar: UIProgressView!
+    
     let eggTimes = ["Soft":  5, "Medium": 7, "Hard": 12]
     
-    var secondsRemaining = 60
+    var totalTime = 0
+    var secondsPassed = 0
     
     var timer = Timer()
     
@@ -22,18 +25,22 @@ class ViewController: UIViewController {
         timer.invalidate()
         let hardness = sender.currentTitle!
         let cookingTimeInSeconds = eggTimes[hardness]! * 1
-        secondsRemaining = cookingTimeInSeconds
-        print("Clicked \(secondsRemaining)")
+        totalTime = cookingTimeInSeconds
+        secondsPassed = 0
+        progressBar.progress = 0.0
+        titleLabel.text = hardness
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in self.updateTimer() }
         
     }
     
     func updateTimer() {
-        if secondsRemaining > 0 {
-            print("\(secondsRemaining) seconds.")
-            secondsRemaining -= 1
-        } else {
+        if secondsPassed < totalTime {
+            secondsPassed += 1
+            progressBar.progress = Float(secondsPassed) / Float(totalTime)
+        }
+        if secondsPassed == totalTime {
             timer.invalidate()
+            progressBar.progress = 1.0
             titleLabel.text = "Done"
         }
     }
