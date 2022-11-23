@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        questionLabel.text = quiz[questionNumber].text
+        displayCurrentQuestion()
     }
 
 
@@ -44,13 +44,22 @@ class ViewController: UIViewController {
         let actualAnswer = quiz[questionNumber].answer
         
         if userAnswer == actualAnswer {
-            print("Right")
+            sender.backgroundColor = UIColor.green
         } else {
-            print("Wrong")
+            sender.backgroundColor = UIColor.red
         }
         
         questionNumber = (questionNumber + 1) % quiz.count
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) {
+            _ in self.displayCurrentQuestion()
+        }
+    }
+    
+    func displayCurrentQuestion() {
         questionLabel.text = quiz[questionNumber].text
+        trueButton.backgroundColor = UIColor.clear
+        falseButton.backgroundColor = UIColor.clear
     }
 }
 
