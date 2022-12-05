@@ -18,6 +18,7 @@ class CalculatorViewController: UIViewController {
     
     var tip: Float = 0.1
     var nPeople: Int = 2
+    var totalPerPerson: Float = 0.0
     
     @IBAction func tipChanged(_ sender: UIButton) {
         zeroPctButton.isSelected = sender == zeroPctButton
@@ -41,8 +42,17 @@ class CalculatorViewController: UIViewController {
     @IBAction func calculatePressed(_ sender: UIButton) {
         billTextField.endEditing(true)
         let bill = Float(billTextField.text ?? "0") ?? 0.0
-        let totalPerPerson = (1 + tip) * bill / Float(nPeople)
-        print(totalPerPerson)
+        totalPerPerson = (1 + tip) * bill / Float(nPeople)
+        performSegue(withIdentifier: "showResultsSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showResultsSegue" {
+            let resultsController = segue.destination as! ResultsViewController
+            resultsController.tip = tip
+            resultsController.nPeople = nPeople
+            resultsController.totalPerPerson = totalPerPerson
+        }
     }
 }
 
